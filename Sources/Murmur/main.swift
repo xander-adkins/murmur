@@ -1,0 +1,3 @@
+import MurmurCore
+
+MurmurApp.main()

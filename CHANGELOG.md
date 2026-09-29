@@ -1,0 +1,23 @@
+# Changelog
+
+All notable changes to Murmur are recorded here. The format follows
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
+[Semantic Versioning](https://semver.org/).
+
+## [1.0.0] - 2026-09-28
+
+### Added
+
+- Push-to-talk dictation from a paired Apple TV Siri Remote: hold Siri to record, release to
+  transcribe on-device and paste into the focused terminal, then press Return.
+- Menu bar app with a microphone picker, a keep-warm option for AirPods, launch at login, and a
+  status icon for listening / transcribing / sent / failed.
+- `SpeechAnalyzer` engine on macOS 26 and newer; `SFSpeechRecognizer` fallback on macOS 13–15.
+- Pre-built audio graph and pre-started analysis session between takes.
+- Menu while a take is in progress discards it without sending Esc to the terminal.
+- Dry-run and simulated-press modes for testing the pipeline without a remote.
+- Self-signed code-signing identity script so macOS privacy grants survive rebuilds.
+- swift-testing suite: exhaustive state-machine invariants, model-based and randomized law tests,
+  boolean-grammar table, controller flow tests against a fake engine.
+
+[1.0.0]: https://github.com/xander-adkins/murmur/releases/tag/v1.0.0

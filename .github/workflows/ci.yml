@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    # SpeechAnalyzer needs the macOS 26 SDK, so the runner must ship Xcode 26.
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+      - name: Toolchain
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.app 2>/dev/null || true
+          swift --version
+      - name: Build
+        run: swift build -c release
+      - name: Test
+        run: scripts/test.sh
+      - name: Package app bundle
+        run: ./build.sh
+      - name: Render icon
+        run: swift scripts/make-icon.swift /tmp/icon && test -s /tmp/icon/AppIcon.icns
