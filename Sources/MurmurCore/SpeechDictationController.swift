@@ -471,6 +471,10 @@ final class AnalyzerEngine: TranscriptionEngine {
 
     let name = "SpeechAnalyzer"
 
+    /// A take that fed less audio than this has nothing to transcribe; waiting for the analyzer to
+    /// finalize silence would only block the next press for seconds.
+    static let minimumAudioSeconds: TimeInterval = 0.15
+
     private let locale: Locale
     private let inputDeviceName: String?
     private let capture = AudioCapture()
@@ -655,9 +659,16 @@ final class AnalyzerEngine: TranscriptionEngine {
             if let feeder {
                 feeder.continuation.finish()
                 let stats = feeder.snapshot
-                log(.dictation, String(format: "fed %.1fs of audio", Double(stats.fedFrames) / feeder.format.sampleRate))
+                let fedSeconds = Double(stats.fedFrames) / feeder.format.sampleRate
+                log(.dictation, String(format: "fed %.1fs of audio", fedSeconds))
                 if let conversionError = stats.conversionError {
                     log(.dictation, "audio conversion failed: \(conversionError)")
+                }
+                if fedSeconds < Self.minimumAudioSeconds {
+                    log(.dictation, "finalized (no audio)")
+                    cancel()
+                    completion("")
+                    return
                 }
             }
             finished.arm(completion, timeout: 5) { [weak self] in
