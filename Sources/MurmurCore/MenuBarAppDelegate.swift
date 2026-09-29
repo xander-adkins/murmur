@@ -94,6 +94,15 @@ final class MenuBarAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate 
         )
     }
 
+    private var swipeNavigationToggle: SettingToggle {
+        SettingToggle(
+            title: "Swipe to Navigate (arrow keys)",
+            isOn: { Settings.swipeNavigation },
+            set: { Settings.swipeNavigation = $0 },
+            afterChange: { [weak self] in self?.controller.swipeSettingChanged() }
+        )
+    }
+
     private var optionToggles: [SettingToggle] {
         [
             SettingToggle(
@@ -176,6 +185,7 @@ final class MenuBarAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate 
         menu.addItem(makeItem(for: sendOnReleaseToggle))
         menu.addItem(microphoneItem)
         menu.addItem(makeItem(for: keepMicWarmToggle))
+        menu.addItem(makeItem(for: swipeNavigationToggle))
         menu.addItem(optionsItem)
         menu.addItem(makeItem(for: launchAtLoginToggle))
         menu.addItem(.separator())

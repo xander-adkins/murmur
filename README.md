@@ -61,6 +61,12 @@ granted, nothing heard) the menu says which.
 | TV | Ctrl-C |
 | Select, Play/Pause | Return |
 | Volume Up / Down | Up / Down arrow |
+| Swipe on the touch surface | arrow key in that direction (one flick, one step) |
+
+Swipes move through an agent's menus; click the surface to choose. The remote's touch surface
+never reaches the HID layer, so Murmur reads it through MultitouchSupport, the framework macOS
+uses for its own trackpads. If the remote has dozed off, the first swipe wakes it and the next
+one counts.
 
 ## Menu bar options
 
@@ -72,6 +78,7 @@ granted, nothing heard) the menu says which.
   headset mode and answer instantly. Without it, AirPods need about a second after the press
   before they deliver audio, so takes under ~2 s come back empty. Costs a permanently lit mic
   indicator and call-quality playback on AirPods. Off by default.
+- **Swipe to Navigate** — swipes on the touch surface press the arrow keys. On by default.
 - **Options ▸ Insert by Typing** — synthesise keystrokes instead of Cmd-V; slower but leaves the
   clipboard alone. **Restore Clipboard After Paste** puts your previous clipboard back.
   **Keep Audio On Device** applies to the legacy engine only; the analyzer is always on-device.
@@ -114,6 +121,7 @@ MURMUR_INSERT=type           # type the transcript instead of pasting
 MURMUR_RESTORE_CLIPBOARD=0   # leave the transcript on the clipboard
 MURMUR_INPUT_DEVICE=AirPods  # substring of the CoreAudio input device name
 MURMUR_KEEP_MIC_WARM=1       # keep the mic streaming between takes
+MURMUR_SWIPE=0               # ignore the touch surface
 MURMUR_LOCALE=en-GB          # recognition locale (default: system locale)
 MURMUR_ENGINE=legacy         # force SFSpeechRecognizer even on macOS 26+
 MURMUR_ON_DEVICE=0           # legacy engine: allow server-side recognition

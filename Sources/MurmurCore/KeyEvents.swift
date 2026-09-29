@@ -14,6 +14,8 @@ enum KeyEvents {
         case v = 9
         case upArrow = 126
         case downArrow = 125
+        case leftArrow = 123
+        case rightArrow = 124
 
         var name: String {
             switch self {
@@ -23,6 +25,8 @@ enum KeyEvents {
             case .v: return "V"
             case .upArrow: return "Up"
             case .downArrow: return "Down"
+            case .leftArrow: return "Left"
+            case .rightArrow: return "Right"
             }
         }
     }

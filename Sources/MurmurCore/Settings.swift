@@ -49,6 +49,12 @@ enum Settings {
         set { defaults.set(newValue, forKey: "keepMicWarm") }
     }
 
+    /// Swipes on the remote's touch surface press the arrow keys. Needs terminal control.
+    static var swipeNavigation: Bool {
+        get { flag(env: "MURMUR_SWIPE", key: "swipeNavigation", default: true) }
+        set { defaults.set(newValue, forKey: "swipeNavigation") }
+    }
+
     /// Substring of a CoreAudio input device name, e.g. "AirPods". Nil means the system default input.
     static var inputDeviceName: String? {
         get {

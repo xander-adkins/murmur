@@ -14,6 +14,7 @@ enum LogTopic: String {
     case audioProbe = "AudioProbe"
     case hid = "HID"
     case hidReport = "HIDReport"
+    case touch = "Touch"
     case terminal = "TerminalControl"
     case keys = "KeyEvents"
     case insert = "Insert"

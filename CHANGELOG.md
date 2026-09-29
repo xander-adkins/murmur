@@ -6,6 +6,12 @@ All notable changes to Murmur are recorded here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Swipes on the remote's touch surface press the arrow keys, so an agent's menus can be
+  navigated from the remote and chosen with a click. One flick is one step. Read through
+  MultitouchSupport; **Swipe to Navigate** in the menu bar (or `MURMUR_SWIPE=0`) turns it off.
+
 ### Changed
 
 - New app icon: a heavy geometric three-arched lowercase m warped along a gentle sine so each

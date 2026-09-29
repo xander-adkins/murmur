@@ -7,10 +7,19 @@ final class RemoteController {
     private let audioDeviceProbe = AudioDeviceProbe()
     private let speechDictation: SpeechDictationController
     private lazy var hidMonitor = HIDMonitor { [weak self] button, isPressed in
+        self?.touchSurface.remoteWoke()
         self?.dispatchButton(button, isPressed: isPressed)
+    }
+    private lazy var touchSurface = TouchSurface { [weak self] swipe in
+        self?.terminalControl.handle(swipe: swipe)
     }
 
     private(set) var isRunning = false
+
+    /// Swipes are only worth reading when they can reach the terminal and the user wants them.
+    private var wantsTouchSurface: Bool {
+        isRunning && terminalControl.isEnabled && Settings.swipeNavigation
+    }
 
     init(speechDictation: SpeechDictationController = SpeechDictationController()) {
         self.speechDictation = speechDictation
@@ -40,6 +49,7 @@ final class RemoteController {
         speechDictation.start()
         audioDeviceProbe.start()
         hidMonitor.start()
+        syncTouchSurface()
     }
 
     func stop() {
@@ -48,6 +58,7 @@ final class RemoteController {
         }
         isRunning = false
 
+        syncTouchSurface()
         hidMonitor.stop()
         speechDictation.stop()
         audioDeviceProbe.stop()
@@ -69,5 +80,18 @@ final class RemoteController {
     /// Re-applies microphone choice and keep-warm after a menu change.
     func microphoneSettingsChanged() {
         speechDictation.microphoneSettingsChanged()
+    }
+
+    /// Starts or stops reading the touch surface after a menu change.
+    func swipeSettingChanged() {
+        syncTouchSurface()
+    }
+
+    private func syncTouchSurface() {
+        if wantsTouchSurface {
+            touchSurface.start()
+        } else {
+            touchSurface.stop()
+        }
     }
 }

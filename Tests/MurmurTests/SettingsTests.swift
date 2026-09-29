@@ -131,6 +131,7 @@ extension GlobalState {
         ("MURMUR_ON_DEVICE", { Settings.onDeviceRecognition }),
         ("MURMUR_RESTORE_CLIPBOARD", { Settings.restoreClipboard }),
         ("MURMUR_KEEP_MIC_WARM", { Settings.keepMicWarm }),
+        ("MURMUR_SWIPE", { Settings.swipeNavigation }),
         ("MURMUR_DRY_RUN", { Settings.dryRun }),
         ("MURMUR_TERMINAL", { Settings.terminalControlEnabled }),
         ("MURMUR_STDOUT", { Settings.stdoutLogging }),

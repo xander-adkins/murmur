@@ -62,7 +62,9 @@ Hold Siri, talk, release: the transcript is pasted into the focused terminal and
 | `MicrophoneWarmer` | Optional silent input stream that keeps Bluetooth headsets in headset mode. Its state is a sum type, so "off" cancels a pending retry. |
 | `AudioDeviceProbe` | CoreAudio input device listing and lookup. |
 | `TextInserter` / `KeyEvents` | Execute an `insert` effect exactly as specified: paste or type, press Return, restore the clipboard. Reads no settings. |
-| `TerminalControl` | Other buttons → keystrokes (Esc, Ctrl-C, Return, arrows). |
+| `TerminalControl` | Other buttons and swipes → keystrokes (Esc, Ctrl-C, Return, arrows). |
+| `SwipeRecognizer` | Pure: `(stroke, touch event) → (stroke, swipe?)`. One flick is one arrow key, reported as soon as the finger has travelled far enough. |
+| `TouchSurface` / `MultitouchFramework` | Reads the remote's touch surface through the private MultitouchSupport framework, bound with `dlopen`; frames are decoded on its thread and decided on the main thread. |
 | `MenuBarAppDelegate` | Status item, toggles, microphone picker, launch at login. |
 | `Settings` | Environment → UserDefaults → default. Injectable for tests. |
 | `Support` | `OneShotCompletion` (release → exactly one transcript, or a timeout), small `Date`/`String` helpers. |
@@ -97,8 +99,14 @@ uses automatically; grants then survive rebuilds.
 - **Uncatchable failures are avoided, not caught.** CoreAudio raises Objective-C exceptions for a
   stale audio graph; `AudioCapture` invalidates the pre-built graph on configuration changes and
   checks the hardware format before starting.
-- **Pure where it matters.** Button decoding, transcript assembly, settings resolution and the
-  graph-reuse policy are value types with tests; the hardware-facing classes stay thin.
+- **Pure where it matters.** Button decoding, swipe recognition, transcript assembly, settings
+  resolution and the graph-reuse policy are value types with tests; the hardware-facing classes
+  stay thin.
+- **The touch surface is not HID.** The remote's clickpad reports only its click over HID; finger
+  positions come from MultitouchSupport, which lists the remote as a small (35 mm) surface next to
+  the trackpads. The framework is private, so it is loaded at runtime and its absence just means
+  no swipes. Its device objects belong to the list they came from and are retained before it goes;
+  the surface vanishes when the remote sleeps and is re-read on the next poll or button press.
 - **No dead ends kept.** The lab-phase Bluetooth scanning, direct-connect attempts, feature-report
   probing for the remote's microphone and the keystroke-logging event tap were removed once they
   had answered their questions (pair through macOS; the mic is not reachable). They live in git

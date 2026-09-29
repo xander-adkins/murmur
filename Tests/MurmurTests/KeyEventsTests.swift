@@ -74,10 +74,17 @@ import Testing
         #expect(TerminalControl.keyMapping[.tv]?.name == "Ctrl-C")
     }
 
-    @Test func mappingLinesFollowButtonOrderAndTheTable() {
+    @Test func everySwipeDirectionPressesItsOwnArrow() {
+        #expect(Set(TerminalControl.swipeMapping.keys) == Set(SwipeDirection.allCases))
+        #expect(TerminalControl.swipeMapping.values.allSatisfy { $0.modifiers.isEmpty })
+        #expect(Set(TerminalControl.swipeMapping.values.map(\.key)).count == SwipeDirection.allCases.count)
+    }
+
+    @Test func mappingLinesFollowButtonOrderThenSwipesAndTheTable() {
         #expect(TerminalControl.mappingLines == [
             "Menu -> Esc", "Back -> Esc", "TV -> Ctrl-C", "Select -> Return",
             "Play/Pause -> Return", "Volume Up -> Up", "Volume Down -> Down",
+            "Swipe Up -> Up", "Swipe Down -> Down", "Swipe Left -> Left", "Swipe Right -> Right",
         ])
     }
 }
